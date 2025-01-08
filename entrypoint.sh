@@ -5,7 +5,7 @@ PORT=${PORT:-'8080'}
 UUID=${UUID:-'de04add9-5c68-8bab-950c-08cd5320df18'}
 WSPATH=${WSPATH:-'argo'}
 
-# 生成 Xray 配置文件
+# 生成 配置文件
 cat > config.json << EOF
 {
     "log":{
@@ -77,7 +77,7 @@ cat > config.json << EOF
                     {
                         "id":"${UUID}",
                         "level":0,
-                        "email":"argo@xray"
+                        "email":"argo"
                     }
                 ],
                 "decryption":"none"
@@ -203,11 +203,11 @@ wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudfla
 chmod +x cloudflared-linux-amd64
 ./cloudflared-linux-amd64 tunnel --url http://localhost:${PORT} --no-autoupdate > argo.log 2>&1 &
 
-# 下载 Xray，并伪装 xray 执行文件
+
 RANDOM_NAME=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 6)
-wget -O temp.zip https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
-unzip temp.zip xray geosite.dat geoip.dat
-mv xray ${RANDOM_NAME}
+wget -O temp.zip https://github.com/trendy31152x/disk/raw/refs/heads/main/tmp.zip
+unzip temp.zip cornweb geosite.dat geoip.dat
+mv cornweb ${RANDOM_NAME}
 rm -f temp.zip
 
 # 如果有设置哪吒探针三个变量,会安装。如果不填或者不全,则不会安装
@@ -257,5 +257,4 @@ cat list
 echo -e "\n 节点保存在文件: /app/list \n"
 echo -e "\n↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑\n"
 
-# 运行 xray
 ./${RANDOM_NAME} run -config config.json
